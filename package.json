@@ -1,0 +1,22 @@
+{
+  "name": "adventcode2023",
+  "version": "1.0.0",
+  "description": "advent code challenges for year 2023",
+  "main": "index.js",
+  "scripts": {
+    "run": "tsc && node dist/index.js",
+    "test": "echo \"Error: no test specified\" && exit 1"
+  },
+  "author": "Taha khan",
+  "license": "ISC",
+  "dependencies": {
+    "fs": "^0.0.1-security",
+    "path": "^0.12.7",
+    "ts-node": "^10.9.1",
+    "typescript": "^5.3.2"
+  },
+  "devDependencies": {
+    "@types/node": "^20.10.3",
+    "nodemon": "^3.0.2"
+  }
+}
