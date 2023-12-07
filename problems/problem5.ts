@@ -41,7 +41,7 @@ export async function part2() {
 }
 
 async function extractData() {
-    const lines = await readLines('../input/input6.txt');
+    const lines = await readLines('../input/input5.txt');
     let label = "";
     for (const line of lines) {
         if (line.indexOf("seeds: ") > -1)
@@ -71,10 +71,16 @@ async function extractData() {
     {
         const source = numbers.filter(n => n[0] === miteration[0]);
         const target = numbers.filter(n => n[0] === miteration[1]);
+        
         removeItemsWithName(miteration[0]);
         removeItemsWithName(miteration[1]);
         for (const s of source)
         {
+            const s1 = s[2]; const s2 = s[2] + s[3];
+            for (const t of target)
+            {
+                const t1 = t[2]; const t2 = t[2] + t[3];
+            }
             console.log(s[0], s[1], s[2], s[3] , s[1] + s[3]);   
         }
         console.log(miteration[0], miteration[1], miteration[2]);
