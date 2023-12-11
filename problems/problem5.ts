@@ -60,12 +60,13 @@ async function extractData() {
             iterations.push(n[0]);
 
     const minimiseIterations: [s1: string, s2: string, t: string][] = [];
-    minimiseIterations.push(["seed-to-soil", "soil-to-fertilizer", "seed-to-fertilizer"]); 
-    minimiseIterations.push(["seed-to-fertilizer", "fertilizer-to-water", "seed-to-water"]); 
-    minimiseIterations.push(["seed-to-water", "water-to-light", "seed-to-light"]); 
-    minimiseIterations.push(["seed-to-light", "light-to-temperature", "seed-to-temperature"]); 
-    minimiseIterations.push(["seed-to-temperature", "temperature-to-humidity", "seed-to-humidity"]); 
-    minimiseIterations.push(["seed-to-humidity", "humidity-to-location", "seed-to-location"]);
+    
+    minimiseIterations.push(["temperature-to-humidity", "humidity-to-location", "temperature-to-location"]);
+    minimiseIterations.push(["light-to-temperature", "temperature-to-location", "light-to-location"]); 
+    minimiseIterations.push(["water-to-light", "light-to-location", "water-to-location"]); 
+    minimiseIterations.push(["fertilizer-to-water", "water-to-location", "fertilizer-to-location"]); 
+    minimiseIterations.push(["soil-to-fertilizer", "fertilizer-to-location", "soil-to-location"]); 
+    minimiseIterations.push(["seed-to-soil", "soil-to-location", "seed-to-location"]); 
 
     for (const miteration of minimiseIterations)
     {
