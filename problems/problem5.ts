@@ -62,29 +62,44 @@ async function extractData() {
     const minimiseIterations: [s1: string, s2: string, t: string][] = [];
     
     minimiseIterations.push(["temperature-to-humidity", "humidity-to-location", "temperature-to-location"]);
-    minimiseIterations.push(["light-to-temperature", "temperature-to-location", "light-to-location"]); 
-    minimiseIterations.push(["water-to-light", "light-to-location", "water-to-location"]); 
-    minimiseIterations.push(["fertilizer-to-water", "water-to-location", "fertilizer-to-location"]); 
-    minimiseIterations.push(["soil-to-fertilizer", "fertilizer-to-location", "soil-to-location"]); 
-    minimiseIterations.push(["seed-to-soil", "soil-to-location", "seed-to-location"]); 
+    // minimiseIterations.push(["light-to-temperature", "temperature-to-location", "light-to-location"]); 
+    // minimiseIterations.push(["water-to-light", "light-to-location", "water-to-location"]); 
+    // minimiseIterations.push(["fertilizer-to-water", "water-to-location", "fertilizer-to-location"]); 
+    // minimiseIterations.push(["soil-to-fertilizer", "fertilizer-to-location", "soil-to-location"]); 
+    // minimiseIterations.push(["seed-to-soil", "soil-to-location", "seed-to-location"]); 
 
     for (const miteration of minimiseIterations)
     {
-        const source = numbers.filter(n => n[0] === miteration[0]);
-        const target = numbers.filter(n => n[0] === miteration[1]);
+        const sb = numbers.filter(n => n[0] === miteration[0]);
+        const db = numbers.filter(n => n[0] === miteration[1]);
         
         removeItemsWithName(miteration[0]);
         removeItemsWithName(miteration[1]);
-        for (const s of source)
+
+        console.log(sb);
+        console.log("********************");
+        console.log(db);
+        console.log("********************");
+        
+       
+        for (const d of db)
         {
-            const s1 = s[2]; const s2 = s[2] + s[3];
-            for (const t of target)
-            {
-                const t1 = t[2]; const t2 = t[2] + t[3];
-            }
-            console.log(s[0], s[1], s[2], s[3] , s[1] + s[3]);   
+            const dd1 = d[1]; const dd2 = d[1] + d[3];
+            const ds1 = d[2]; const ds2 = d[2] + d[3];
+            for (const s of sb)
+            {      
+                const sd1 = s[1]; const sd2 = s[1] + s[3];
+                const ss1 = s[2]; const ss2 = s[2] + s[3];         
+            
+                      if (sd1 >= ds1 && sd2 <= ds2) console.log(miteration[2], (dd1 + Math.abs(sd1 - ds1)), ss1, Math.abs(sd2 - sd1), ds1, ds2, sd1, sd2)
+                      //numbers.push([miteration[2], (dd1 + Math.abs(sd1 - ds1)), ss1, Math.abs(sd2 - sd1)]);
+                // else if (sd1 >= ds1 && sd2 >  ds2) numbers.push([miteration[2], (dd1 + Math.abs(sd1 - ss1)), ss1, Math.abs(ds2 - sd1)]);
+                // else if (sd1 <  ds1 && sd2 <= ds2) numbers.push([miteration[2], dd1, ss1 + Math.abs(ds1 - sd1), Math.abs(sd2 - ds1)]);
+                // else if (sd1 <  ds1 && sd2 >  ds2) numbers.push([miteration[2], dd1, ss1 + Math.abs(ds1 - sd1), Math.abs(ds2 - ds1)]);
+            }            
         }
         console.log(miteration[0], miteration[1], miteration[2]);
+        //for (const n of numbers) console.log(n);
     }
 }
 
