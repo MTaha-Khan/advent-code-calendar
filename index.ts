@@ -1,3 +1,3 @@
-import { part1, part2 } from "./problems/problem13";
+import { part1, part2 } from "./problems/problem16";
 
-part1();
+part2();
