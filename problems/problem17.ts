@@ -50,7 +50,24 @@ export async function part1() {
 
     console.log("complete paths found ", complete.length);
 
-    for (const p of complete) console.log(p.total, p.visited);
+    let total = Infinity;
+    let path = null;
+    for (const p of complete) {
+        if (p.total < total) {
+            total = p.total;
+            path = p;
+        }
+        if (p.visited.includes(142)) console.log("jkkjkj", p.total)
+    }
+
+    console.log("Least heat path ", path?.total, path?.visited);
+
+    let score = 0;
+    for (const v of (path?.visited || [])) {
+        score += getScore(v)
+    }
+
+    console.log(score);
 
 
    
@@ -62,7 +79,7 @@ export async function part2() {
 }
 
 function findCompletePaths() {
-    
+    console.log(map.length)
     paths.enqueue(new Path(startNode, "E"));
     let path = null;
 
@@ -108,17 +125,23 @@ function findCompletePaths() {
 
 function tryAddPath(num: number, nd: dir, oldPath: Path) {
     const newTotal = oldPath.total + getScore(num);
-    //if (num === 17) console.log(newTotal, nodeScores[num])
+    const difference = Math.abs(nodeScores[num] - newTotal)
     if (nodeScores[num] == null || nodeScores[num] > newTotal) {
-        // remove all other paths with coordinate num
-        const pathsArray  = [...paths.toArray()];
-        paths = new Queue();
-        for (const p of pathsArray) {
-            if (!p.exists(num)) paths.enqueue(p);
-        } 
 
-        if (!oldPath.exists(num)) paths.enqueue(new Path(num, nd, oldPath));
-        nodeScores[num] = newTotal;
+        if(difference > 100) {
+            // remove all other paths with coordinate num
+            const pathsArray  = [...paths.toArray()];
+            paths = new Queue();
+            for (const p of pathsArray) {
+                //if (p.exists(17)&& !p.exists(num)) console.log(num, newTotal, nodeScores[num]);
+
+                if (!p.exists(num)) paths.enqueue(p);
+            } 
+        }
+        //if (!oldPath.exists(num)) {
+            paths.enqueue(new Path(num, nd, oldPath));
+            nodeScores[num] = newTotal;
+        //}
     } else {
         // console.log(num, nodeScores[num], oldPath.total + getScore(num));     
     }
