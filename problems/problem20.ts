@@ -10,10 +10,16 @@ export async function part2() {
 
 }
 
-
 async function extractData() {
-    const lines = await readLines('../input/input20.txt');
+    let lines = [];
+    
+    if (sample) lines = await readLines('../input/input20.txt');
+    else lines = sampleInput.split('\n')
+
     for (const line of lines) {
         
     }    
 }
+
+const sample = true;
+const sampleInput = ``;
