@@ -116,7 +116,7 @@ function hash(str: string): number {
 
 
 async function extractData() {
-    const lines = await readLines('../input/input15.txt'); // sampleInput.split('\n'); // 
+    const lines = sampleInput.split('\n'); // await readLines('../input/input15.txt'); // 
     for (const line of lines) {
         const splits = line.split(',');
         for (const s of splits) steps.push(s);

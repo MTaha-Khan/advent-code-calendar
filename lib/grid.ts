@@ -1,15 +1,15 @@
 
 
-export class Grid 
+export class Grid<T> 
 {
-    private grid: string[][] = [];
-    private ingrid: string[][] = [];
+    private grid: T[][] = [];
+    private ingrid: T[][] = [];
 
     private columnLength: number = 0;
 
     constructor(lines: string[]) {
         for (const line of lines) {
-            this.grid.push(line.split(''));
+            this.grid.push(line.split('').map(c => c as T));
             if (line.length > this.columnLength) this.columnLength = line.length;
         }
 

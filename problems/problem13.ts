@@ -18,7 +18,7 @@ const testMap = `#.##..##.
 #....#..#
 `;
 
-const grids: Grid[] = [];
+const grids: Grid<string>[] = [];
 
 const reflections: { grid: number, index: number, dir: "H" | "V" } [] = [];
 
@@ -98,14 +98,14 @@ function findReflections() {
     }
 }
 
-function checkHorizontal(grid: Grid, index: number): boolean {
+function checkHorizontal(grid: Grid<string>, index: number): boolean {
     for (let i = index, j = index + 1; i >= 0 && j < grid.rows; i--, j++) {
         if (grid.rowAsString(i) !== grid.rowAsString(j)) return false;
     }
     return true;
 }
 
-function checkVertical(grid: Grid, index: number): boolean {
+function checkVertical(grid: Grid<string>, index: number): boolean {
     for (let i = index, j = index + 1; i >= 0 && j < grid.columns; i--, j++) {
         if (grid.colAsString(i) !== grid.colAsString(j)) return false;
     }
@@ -148,7 +148,7 @@ function findSmudgeReflections() {
     }
 }
 
-function smudgeHorizontal(grid: Grid, index: number): boolean {
+function smudgeHorizontal(grid: Grid<string>, index: number): boolean {
     let found: boolean = false;
     for (let i = index, j = index + 1; i >= 0 && j < grid.rows; i--, j++) {
         const ri = grid.row(i), rj = grid.row(j);
@@ -164,7 +164,7 @@ function smudgeHorizontal(grid: Grid, index: number): boolean {
     return found;
 }
 
-function smudgeVertical(grid: Grid, index: number): boolean {
+function smudgeVertical(grid: Grid<string>, index: number): boolean {
     let found: boolean = false;
     for (let i = index, j = index + 1; i >= 0 && j < grid.columns; i--, j++) {
         const ci = grid.column(i), cj = grid.column(j);
@@ -185,7 +185,7 @@ async function extractData() {
     let temp: string[] = [];
     for (const line of lines) {
         if(!line.trim()) {
-            grids.push(new Grid(temp));
+            grids.push(new Grid<string>(temp));
             temp = [];
         } else temp.push(line);
     }   
