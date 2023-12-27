@@ -1,21 +1,24 @@
 import { readLines } from "../helper";
+import { Position } from "../lib/grid";
 
 let currentStep = 0;
-let currentPositions: {y: number, x: number}[] = [];
+let currentPositions: Position[] = [];
+let searchPositions: string[] = [];
 
 export async function part1() {
     await extractData();    
 
     currentPositions.push(start);
+    searchPositions = [];
 
     for (let i = currentStep; i < steps; i++) {
-        let newPositions: {y: number, x: number}[] = [];
-
+        let newPositions: Position[] = [];
+       
         for (const c of currentPositions) {
-            if (movePossible(c.y - 1, c.x) && !newPositions.find(n => n.x === c.x && n.y === c.y - 1)) newPositions.push({ y: c.y - 1, x: c.x });
-            if (movePossible(c.y + 1, c.x) && !newPositions.find(n => n.x === c.x && n.y === c.y + 1)) newPositions.push({ y: c.y + 1, x: c.x });
-            if (movePossible(c.y, c.x - 1) && !newPositions.find(n => n.x === c.x - 1 && n.y === c.y)) newPositions.push({ y: c.y, x: c.x - 1 });
-            if (movePossible(c.y, c.x + 1) && !newPositions.find(n => n.x === c.x + 1 && n.y === c.y)) newPositions.push({ y: c.y, x: c.x + 1 });
+            if (movePossible(c.y - 1, c.x) && !searchPositions.includes(c.upStr)) { newPositions.push(c.up); searchPositions.push(c.upStr); }
+            if (movePossible(c.y + 1, c.x) && !searchPositions.includes(c.downStr)) { newPositions.push(c.down); searchPositions.push(c.downStr); }
+            if (movePossible(c.y, c.x - 1) && !searchPositions.includes(c.leftStr)) { newPositions.push(c.left); searchPositions.push(c.leftStr); }
+            if (movePossible(c.y, c.x + 1) && !searchPositions.includes(c.rightStr)) { newPositions.push(c.right); searchPositions.push(c.rightStr); }
         }
 
         currentPositions = newPositions;
@@ -35,20 +38,43 @@ function movePossible(y: number, x: number) : boolean {
     return false;
 }
 
+function movePossibleInfinite(y: number, x: number) : boolean {
+    let nx = x; let ny = y;
+
+    if (y < 0 || y > map.length - 1) ny = mod(y, map.length);    
+    if (x < 0 || x > map[ny].length - 1) nx = mod(x, map[ny].length);
+    
+    if (map[ny][nx] === '.' || map[ny][nx] === 'S') return true;
+    return false;
+}
+
+function mod(d1: number, d2: number) : number {
+    return ((d1 % d2) + d2) % d2;
+}
 
 export async function part2() {
     await extractData();    
 
-}
+    console.time("total time")
+    currentPositions.push(start);
 
-function calculatePositions(): number {
-    let total = 0;
-    for (let i = 0; i < map.length; i++) {
-        for (let j = 0; j < map[i].length; j++) {
-            if (map[i][j] === 'O') total += 1;
+    for (let i = currentStep; i < steps; i++) {
+        let newPositions: Position[] = [];
+        searchPositions = [];
+
+        for (const c of currentPositions) {            
+            if (movePossibleInfinite(c.y - 1, c.x) && !searchPositions.includes(c.upStr)) { newPositions.push(c.up); searchPositions.push(c.upStr); }
+            if (movePossibleInfinite(c.y + 1, c.x) && !searchPositions.includes(c.downStr)) { newPositions.push(c.down); searchPositions.push(c.downStr); }
+            if (movePossibleInfinite(c.y, c.x - 1) && !searchPositions.includes(c.leftStr)) { newPositions.push(c.left); searchPositions.push(c.leftStr); }
+            if (movePossibleInfinite(c.y, c.x + 1) && !searchPositions.includes(c.rightStr)) { newPositions.push(c.right); searchPositions.push(c.rightStr); }
         }
+
+        currentPositions = newPositions;
+        if (i % 10000 == 0) console.log(i, currentPositions.length)
     }
-    return total;
+
+    console.log("step positions possible ", currentPositions.length);
+    console.timeEnd("total time")
 }
 
 async function extractData() {
@@ -60,16 +86,16 @@ async function extractData() {
     let idx = 0;
     for (const line of lines) {
         const mapline = line.split('');
-        if (mapline.indexOf('S') > -1) start = { y: idx, x: mapline.indexOf('S')};
+        if (mapline.indexOf('S') > -1) start = new Position(idx , mapline.indexOf('S'));
         map.push(mapline);
         idx++;
     }    
 }
 
-let start: {y: number, x: number} = {y: 0, x: 0};
+let start: Position = new Position(0 , 0);
 const map: string[][] =[];
-const steps = 64;
-const sample = false;
+const steps = 200;
+const sample = true;
 const sampleInput = `...........
 .....###.#.
 .###.##..#.

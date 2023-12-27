@@ -40,3 +40,24 @@ export class Grid<T>
 
     public colAsString = (index: number) => this.column(index).join('');
 }
+
+
+export class Position 
+{
+    public y: number = 0;
+    public x: number = 0;    
+
+    constructor(y1: number, x1: number) {
+        this.y = y1; this.x = x1; 
+    }
+
+    public get left(): Position { return new Position(this.y, this.x - 1); }
+    public get right(): Position { return new Position(this.y, this.x + 1); }
+    public get up(): Position { return new Position(this.y - 1, this.x); }
+    public get down(): Position { return new Position(this.y + 1, this.x); }
+
+    public get leftStr(): string { return [this.y, this.x - 1].toString(); }
+    public get rightStr(): string { return [this.y, this.x + 1].toString(); }
+    public get upStr(): string { return [this.y - 1, this.x].toString(); }
+    public get downStr(): string { return [this.y + 1, this.x].toString(); }
+}
