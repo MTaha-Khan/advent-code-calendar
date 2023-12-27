@@ -13,3 +13,12 @@ export async function readLines(file: string, readEmptyLines: boolean = false) :
     }
     return lines;
 }
+
+export async function readAll(file: string, readEmptyLines: boolean = false) : Promise<string> {
+    try {
+        return await fs.readFile(path.join(__dirname, file), { encoding: 'utf8' });
+    } catch (err) {
+        console.log(err);
+        throw new Error(`Error : ${err}`)
+    }
+}
