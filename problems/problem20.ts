@@ -1,4 +1,4 @@
-import { readLines } from "../helper";
+import { readAll, readAllSync, readLines } from "../helper";
 
 let hiPulse = 0;
 let loPulse = 0;
@@ -55,7 +55,7 @@ export async function part1() {
     console.log("Pulsimeter ", hiPulse, loPulse, hiPulse * loPulse);   
 }
 
-function pressButton(): boolean {
+function pressButton(cycles: number = 0): boolean {
     current = [];
     current.push({ n: "broadcaster", p: "low", s: "button"});
     let idx = 0;
@@ -64,11 +64,11 @@ function pressButton(): boolean {
         let newCurrent: state[] = [];
         for (const c of current) {
             if (c.n === "rx" && c.p === "low") { console.log(" found ", c); found = true };
+            if (rxInputModules.includes(c.s) && c.p === "high" && rxInputs[c.s] === 0) { rxInputs[c.s] = cycles + 1; rxInputsFound++; }
             if (c.p === "low") loPulse += 1; else hiPulse += 1;
             if (modules[c.n]) newCurrent.push(...modules[c.n].send(c.p, c.s));            
         }
         current = newCurrent;
-        //console.log(idx, current, loPulse, hiPulse);
         idx++;
     }
 
@@ -76,18 +76,24 @@ function pressButton(): boolean {
 }
 
 export async function part2() {
+    console.time("time");
     await extractData();    
-
+    for (const k in rxInputs) rxInputModules.push(k);
+    const rxInputsPresent = rxInputModules.length;
     let cycles = 0;
     let found = false;
     while(!found) {
-        found = pressButton();
+        found = pressButton(cycles);
+        if (!found) {
+            if (rxInputsFound === rxInputsPresent) found = true;
+        }
         cycles++;
     }
 
-    console.log("minimum press button ", cycles);
-
-
+    const values = Object.values(rxInputs);
+    const rxPresses = values.length > 0 ? values.reduce(lcm) : 1;
+    console.log("minimum press button ", rxPresses);
+    console.timeEnd("time");
 }
 
 async function extractData() {
@@ -111,9 +117,19 @@ async function extractData() {
             if (modules[n].output.includes(c)) {
                 modules[c].input.push({n, p: "low"});
             }
-        }        
+        }       
+        if (modules[n].output.includes("rx")) {            
+            for (const i of modules[n].input) rxInputs[i.n] = 0;
+        }
     }
 }
+
+const gcd = (a: number, b: number): number => (!b ? a : gcd(b, a % b));
+const lcm = (a: number, b: number): number => (a * b) / gcd(a, b);
+
+let rxInputsFound = 0;
+const rxInputModules: string[] = [];
+const rxInputs: { [key: string]: number } = {};
 
 const sample = false;
 const sampleInput = `broadcaster -> a, b, c
